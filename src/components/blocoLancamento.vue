@@ -6,23 +6,39 @@
 					src="../img/mais.png"
 					alt="entrada"
 					class="ImagemLancamento"
-			 />
-			 <img
+			/>
+			<img
 					v-else-if="tipo === 'saida'"
 					src="../img/menos.png"
 					alt="gastos"
 					class="ImagemLancamento"
-			 />
+			/>
 				<img src="" alt="" class="imagemLancamento">
 				<button class="botaoRemover">
-					<img src="" alt="">
+					<img src="../img/lixeira.png" alt="">
 				</button>
 		</div>
 
 		<div class="descricaoLancamento">
-			 <span class="valor">R$</span>
-			 <span>Data</span>
-			 <span>Descricao</span>
+			<span v-if="tipo === 'entrada'" class="valor entrada"
+      >R$ {{ 
+        lancamento.valor.toLocaleString(undefined, {
+          minimumFractionDigits: 2,
+        }) 
+      }}</span
+      >
+      <span v-else-if="tipo === 'saida'" class="valor gasto"
+      >R$ {{ 
+        lancamento.valor.toLocaleString(undefined, {
+          minimumFractionDigits: 2,
+        }) 
+      }}</span
+      >
+			<span>{{ new Date(lancamento.data).toLocaleDateString( "pt-BR", {
+        timeZone: "UTC",
+      })
+    }}</span>
+			<span>{{ lancamento.descricao }}</span>
 		</div>
   </div>
 </template>
@@ -37,6 +53,63 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+ .blocoLancamento {
+  display: flex;
+  background-color: white;
+  border-radius: 20px;
+  padding: 10px;
+  margin-bottom: 10px;
+ }
 
+ .botoes {
+  width: 50%;
+ }
+
+ .ImagemLancamento {
+  width: 50px;
+  vertical-align: middle;
+ }
+
+ .botaoRemover{
+  border: none;
+  outline: none;
+  background-color: white;
+  vertical-align: middle;
+ }
+
+ .botaoRemover:hover{
+  cursor: pointer;
+ }
+
+ .botaoRemover img{
+   width: 40px;
+ }
+
+ .botaoRemover img:active{
+   filter: invert(100%);
+ }
+ .descricaoLancamento {
+  width: 50%;
+  float: right;
+  text-align: right;
+ }
+
+ .descricaoLancamento span {
+   display: block;
+   font-size: 80%;
+ }
+
+ .valor {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 200% !important;
+  font-weight: 700;
+ }
+
+ .entrada {
+  color: #22a7f0
+ }
+ .gasto {
+  color: red;
+ }
 </style>

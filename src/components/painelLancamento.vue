@@ -18,13 +18,42 @@
           <button>lancar</button>
         </form>
     </div>
+    <div id="areaLancamento">
+      <blocoLancamento
+        tipo="entrada"
+        :lancamento="{
+          valor: 100,
+          descricao: 'Venda de Hq',
+          data: '2020-10-20',
+        }"
+      />
+      <blocoLancamento
+        tipo="saida"
+        :lancamento="{
+          valor: 50,
+          descricao: 'Mercado',
+          data: '2020-10-20',
+        }"
+      />
+      <blocoLancamento
+        tipo="saida"
+        :lancamento="{
+          valor: 10,
+          descricao: 'Saida',
+          data: '2020-10-20',
+        }"
+      />
+  </div>
   </div>
 </template>
 
 <script>
+import BlocoLancamento from './blocoLancamento.vue'
 export default {
-    name: "PainelLancamento"
-
+    name: "PainelLancamento",
+    components: {
+      BlocoLancamento
+    }
 }
 </script>
 
@@ -84,5 +113,8 @@ button {
   font-size: 120%;
   font-weight: 700;
   cursor: pointer;
+}
+#areaLancamento {
+  margin-top: 30px;
 }
 </style>
