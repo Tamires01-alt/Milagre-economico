@@ -36,4 +36,10 @@ body {
   display: flex;
   padding: 20px;
 }
+.entrada {
+  color: #22a7f0;
+}
+.gasto {
+  color: red;
+}
 </style>

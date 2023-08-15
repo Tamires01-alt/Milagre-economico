@@ -2,7 +2,15 @@
   <div id="painelResumo">
     <div class="resumoCaixa">
         <span class="fraseResumo">Dinheiro em caixa</span>
-        <span class="caixa">R$ 0</span>
+        <span 
+          :class="dinheiroEmCaixa > 0 ? 'caixa entrada' : 'caixa gasto' ">
+          R$ 
+            {{ 
+              dinheiroEmCaixa.toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+              })
+            }}
+        </span>
     </div>
     <div class="graficoComportamento">
       <canvas></canvas>
@@ -11,8 +19,14 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
 export default {
-  name: "painelResumo"
+  name: "painelResumo",
+  computed: mapGetters (["dinheiroEmCaixa"]),
+  methods: mapActions(["atualizarCaixa"]),
+  created() {
+    this.atualizarCaixa();
+  }
 }
 </script>
 

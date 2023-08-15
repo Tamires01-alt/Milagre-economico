@@ -2,32 +2,19 @@
   <div class="blocoLancamento">
 		<div class="botoes">
 			<img
-					v-if="tipo === 'entrada'"
-					src="../img/mais.png"
-					alt="entrada"
+					:src=" tipo === 'entrada' ? mais : menos"
+					alt=" tipo === 'entrada' ? 'Entrada' : 'Gasto'"
 					class="ImagemLancamento"
 			/>
-			<img
-					v-else-if="tipo === 'saida'"
-					src="../img/menos.png"
-					alt="gastos"
-					class="ImagemLancamento"
-			/>
-				<img src="" alt="" class="imagemLancamento">
-				<button class="botaoRemover">
+				<button
+          @click="excluirLancamento(lancamento.id)"
+          class="botaoRemover">
 					<img src="../img/lixeira.png" alt="">
 				</button>
 		</div>
 
 		<div class="descricaoLancamento">
-			<span v-if="tipo === 'entrada'" class="valor entrada"
-      >R$ {{ 
-        lancamento.valor.toLocaleString(undefined, {
-          minimumFractionDigits: 2,
-        }) 
-      }}</span
-      >
-      <span v-else-if="tipo === 'saida'" class="valor gasto"
+			<span :class="tipo === 'entrada' ? 'valor entrada' : 'valor gasto'"
       >R$ {{ 
         lancamento.valor.toLocaleString(undefined, {
           minimumFractionDigits: 2,
@@ -44,8 +31,18 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+import mais from '../img/mais.png'
+import menos from '../img/menos.png'
 export default {
 	name: "BlocoLancamento",
+  data: () => {
+    return {
+      mais,
+      menos,
+    };
+  },
+  methods: mapActions(["excluirLancamento"]),
 	props: {
 		tipo: String,
 		lancamento: Object,
@@ -69,6 +66,7 @@ export default {
  .ImagemLancamento {
   width: 50px;
   vertical-align: middle;
+  cursor: pointer;
  }
 
  .botaoRemover{

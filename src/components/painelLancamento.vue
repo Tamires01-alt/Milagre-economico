@@ -1,58 +1,102 @@
 <template>
   <div id="painelLancamento">
     <div id="FormularioLancamento">
-        <form>
+        <form @submit="salvar">
           <div id="tiposLancamentos">
-            <input type="radio" name="tipo" id="entrada">
-            <label for="entrada"> Entrada </label>
-            <input type="radio" name="tipo" id="saida">
-            <label for="saida"> Saida </label>
+            <input
+              type="radio"
+              name="tipo"
+              id="entrada"
+              value="entrada"
+              v-model="tipo"
+            >
+            <label for="entrada" class="entrada"> Entrada </label>
+            <input
+              type="radio"
+              name="tipo"
+              id="saida"
+              value="saida"
+              checked
+              v-model="tipo"
+            >
+            <label for="saida"  class="gasto"> Saida </label>
           </div>
 
           <label for="valor">Valor</label>
-          <input type="number" name="valor" id="valor">
+          <input 
+            type="number"
+            min="0"
+            step="0.01"
+            name="valor"
+            id="valor"
+            required
+            v-model.number="valor"
+          >
           <label for="descricao">Descricao</label>
-          <input type="text" name="descricao" id="descricao">
+          <input
+            type="text"
+            name="descricao"
+            id="descricao"
+            required
+            v-model="descricao"
+          >
           <label for="data">Data</label>
-          <input type="date" name="data" id="data">
+          <input
+            type="date"
+            name="data"
+            id="data"
+            required
+            v-model="data"
+          >
           <button>lancar</button>
         </form>
     </div>
     <div id="areaLancamento">
       <blocoLancamento
-        tipo="entrada"
-        :lancamento="{
-          valor: 100,
-          descricao: 'Venda de Hq',
-          data: '2020-10-20',
-        }"
-      />
-      <blocoLancamento
-        tipo="saida"
-        :lancamento="{
-          valor: 50,
-          descricao: 'Mercado',
-          data: '2020-10-20',
-        }"
-      />
-      <blocoLancamento
-        tipo="saida"
-        :lancamento="{
-          valor: 10,
-          descricao: 'Saida',
-          data: '2020-10-20',
-        }"
+        v-for="lancamento in todosLancamentos"
+        v-bind:key="lancamento.id"
+        :tipo="lancamento.valor > 0 ? 'entrada' : 'saida'"
+        :lancamento="lancamento"
       />
   </div>
   </div>
 </template>
 
 <script>
+import { mapGetters, mapActions } from "vuex"
 import BlocoLancamento from './blocoLancamento.vue'
+import Lancamento from "@/models/lancamento"
 export default {
     name: "PainelLancamento",
+    data: () => {
+      return {
+        tipo: "saida",
+        valor: undefined,
+        descricao: "",
+        data: ""
+      }
+    },
     components: {
       BlocoLancamento
+    },
+    computed: mapGetters(["todosLancamentos"]),
+    methods: {
+      ...mapActions(["salvarLancamento"]),
+      salvar(event) {
+        event.preventDefault()
+        if (this.tipo === "saida") {
+          this.valor *= -1;
+        }
+        const lancamento = new Lancamento(this.valor, this.descricao, this.data)
+        this.salvarLancamento(lancamento)
+        this.limparFormulario()
+      },
+      limparFormulario() {
+        this.tipo = "saida";
+        this.valor = undefined;
+        this.descricao = "";
+        this.data = "";
+      }
     }
 }
 </script>
